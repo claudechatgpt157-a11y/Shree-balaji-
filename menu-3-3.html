@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Shree Balaji Restaurant &amp; Cafe – Menu</title>
+<meta name="theme-color" content="#1B5E20">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{
+  --green:#1B5E20;--g2:#2E7D32;--g3:#43A047;
+  --orange:#E65100;--o2:#FF6D00;--yellow:#FFB300;
+  --bg:#F1F8E9;--white:#fff;--border:#C8E6C9;
+  --text:#1A1A1A;--muted:#666;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);font-family:'Nunito',sans-serif;color:var(--text);min-height:100vh;padding-bottom:130px;}
+
+/* HEADER */
+.hdr{background:linear-gradient(135deg,var(--green) 0%,var(--g2) 60%,#1a3e1a 100%);position:relative;overflow:hidden;}
+.hdr::before{content:'';position:absolute;top:-30px;right:-30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,0.05);}
+.hdr-inner{padding:18px 16px 14px;position:relative;z-index:2;}
+.flag-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.grand{background:var(--orange);color:white;font-size:0.6rem;font-weight:800;padding:3px 10px;border-radius:20px;letter-spacing:1px;text-transform:uppercase;}
+.rname{font-family:'Baloo 2',cursive;font-size:1.65rem;font-weight:800;color:white;line-height:1.1;}
+.rname em{color:var(--yellow);font-style:normal;}
+.rcafe{font-size:0.88rem;color:rgba(255,255,255,0.88);font-weight:700;margin-top:-1px;}
+.raddr{font-size:0.7rem;color:rgba(255,255,255,0.62);margin-top:4px;}
+.tbl-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:12px;padding:6px 14px;margin-top:10px;color:white;font-weight:800;font-size:0.9rem;}
+
+/* CUSTOMER NAME */
+.name-sec{margin:14px 12px 0;background:var(--white);border:2px solid var(--orange);border-radius:16px;padding:14px;}
+.name-lbl{font-weight:800;font-size:0.88rem;color:var(--orange);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.name-in{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;font-family:'Nunito',sans-serif;font-size:0.92rem;font-weight:700;color:var(--text);background:var(--bg);outline:none;}
+.name-in:focus{border-color:var(--orange);background:white;}
+.name-in::placeholder{color:#bbb;font-weight:400;}
+
+/* TABS */
+.tabs{display:flex;gap:8px;padding:12px 12px 6px;overflow-x:auto;scrollbar-width:none;position:sticky;top:0;background:var(--bg);z-index:30;border-bottom:1px solid var(--border);}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{white-space:nowrap;padding:7px 16px;border-radius:25px;border:2px solid var(--border);background:var(--white);color:var(--muted);font-weight:700;font-size:0.76rem;cursor:pointer;transition:all 0.2s;font-family:'Nunito',sans-serif;}
+.tab.active{background:var(--green);border-color:var(--green);color:white;}
+
+/* MENU SECTION */
+.msec{padding:12px 12px 0;}
+.sec-ttl{font-family:'Baloo 2',cursive;font-size:1.05rem;font-weight:700;color:var(--green);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.sec-ttl::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* ITEM CARD */
+.ic{background:var(--white);border:1.5px solid var(--border);border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,0.04);transition:transform 0.14s;}
+.ic:active{transform:scale(0.98);}
+.ie{font-size:1.8rem;flex-shrink:0;width:46px;height:46px;display:flex;align-items:center;justify-content:center;background:var(--bg);border-radius:12px;}
+.ii{flex:1;min-width:0;}
+.in{font-weight:800;font-size:0.9rem;color:var(--text);}
+.ip{font-family:'Baloo 2',cursive;font-size:1.05rem;font-weight:700;color:var(--green);margin-top:2px;}
+.ictrl{flex-shrink:0;display:flex;align-items:center;}
+.qbtn{width:32px;height:32px;border-radius:50%;border:none;font-size:1.2rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Nunito',sans-serif;transition:transform 0.14s;}
+.qbtn:active{transform:scale(0.87);}
+.qm{background:#FFF3E0;color:var(--orange);}
+.qp{background:var(--green);color:white;}
+.qn{width:30px;text-align:center;font-weight:800;font-size:0.95rem;}
+
+/* BEVERAGES */
+.bev-add{width:100%;background:linear-gradient(135deg,var(--orange),var(--o2));color:white;border:none;border-radius:14px;padding:12px;font-family:'Nunito',sans-serif;font-size:0.85rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;}
+.bev-card{background:var(--white);border:1.5px solid #FFE0B2;border-radius:14px;padding:10px 12px;margin-bottom:8px;display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;}
+.bev-in{border:1.5px solid var(--border);border-radius:8px;padding:8px 10px;font-family:'Nunito',sans-serif;font-size:0.83rem;font-weight:600;color:var(--text);background:var(--bg);outline:none;width:100%;}
+.bev-in:focus{border-color:var(--orange);}
+.bev-pr{border:1.5px solid var(--border);border-radius:8px;padding:8px 8px;font-family:'Nunito',sans-serif;font-size:0.83rem;font-weight:700;color:var(--green);background:var(--bg);outline:none;width:76px;}
+.bev-pr:focus{border-color:var(--green);}
+.bev-rm{background:#FFEBEE;color:#E53935;border:none;border-radius:7px;width:30px;height:30px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;}
+
+/* NOTE */
+.note-sec{margin:12px 12px 0;background:var(--white);border:1.5px solid var(--border);border-radius:16px;padding:14px;}
+.note-lbl{font-weight:800;font-size:0.85rem;color:var(--green);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.note-in{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;font-family:'Nunito',sans-serif;font-size:0.85rem;color:var(--text);background:var(--bg);outline:none;resize:none;height:70px;}
+.note-in:focus{border-color:var(--green);}
+
+/* CART FOOTER */
+.cart-foot{position:fixed;bottom:0;left:0;right:0;background:white;border-top:2px solid var(--border);padding:12px 16px;z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,0.08);}
+.cart-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.cart-lbl{font-size:0.74rem;color:var(--muted);font-weight:700;}
+.cart-total{font-family:'Baloo 2',cursive;font-size:1.4rem;font-weight:800;color:var(--green);}
+.order-btn{width:100%;background:linear-gradient(135deg,var(--orange),var(--o2));color:white;border:none;border-radius:14px;padding:14px;font-family:'Baloo 2',cursive;font-size:1.1rem;font-weight:700;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.order-btn:disabled{opacity:0.35;cursor:not-allowed;}
+.order-btn:not(:disabled):active{transform:scale(0.98);}
+.spinner{display:none;width:20px;height:20px;border:3px solid rgba(255,255,255,0.35);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.order-btn.loading .btxt{display:none;}
+.order-btn.loading .spinner{display:block;}
+
+/* ═══════════════════════════
+   SUCCESS + PAYMENT QR SCREEN
+═══════════════════════════ */
+.success-screen{
+  position:fixed;inset:0;z-index:200;
+  background:linear-gradient(160deg,#1B5E20 0%,#2E7D32 50%,#1a3e1a 100%);
+  display:flex;flex-direction:column;align-items:center;
+  overflow-y:auto;
+  padding:30px 20px 40px;
+  text-align:center;
+}
+.success-screen.hidden{display:none;}
+.s-icon{font-size:4.5rem;margin-bottom:12px;animation:bounce 0.7s ease;}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.s-ttl{font-family:'Baloo 2',cursive;font-size:2rem;font-weight:800;color:white;margin-bottom:4px;}
+.s-sub{color:rgba(255,255,255,0.82);font-size:0.92rem;font-weight:600;line-height:1.5;margin-bottom:16px;}
+.s-infobox{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:16px;padding:14px 18px;margin-bottom:18px;width:100%;max-width:320px;text-align:left;}
+.s-irow{display:flex;gap:8px;margin-bottom:6px;font-size:0.86rem;font-weight:700;color:white;}
+.s-irow:last-child{margin-bottom:0;}
+
+/* TAP TO PAY CARD */
+.pay-card{background:white;border-radius:24px;padding:22px 20px 18px;width:100%;max-width:320px;margin-bottom:18px;}
+.pay-card-ttl{font-family:'Baloo 2',cursive;font-size:1.15rem;font-weight:800;color:#1B5E20;margin-bottom:2px;}
+.pay-card-sub{font-size:0.72rem;color:#888;margin-bottom:14px;font-weight:600;}
+.pay-amt-box{background:linear-gradient(135deg,#F1F8E9,#E8F5E9);border:2px solid #C8E6C9;border-radius:16px;padding:14px;margin-bottom:16px;}
+.pay-amt-lbl{font-size:0.68rem;font-weight:800;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.pay-card-amt{font-family:'Baloo 2',cursive;font-size:2.6rem;font-weight:800;color:#1B5E20;line-height:1;}
+.pay-upi-id{font-size:0.65rem;color:#999;margin-top:4px;font-weight:600;}
+
+/* UPI APP BUTTONS */
+.upi-btn{width:100%;border:none;border-radius:14px;padding:14px 16px;font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;transition:transform 0.14s,box-shadow 0.14s;text-decoration:none;}
+.upi-btn:active{transform:scale(0.97);}
+.upi-gpay{background:#fff;border:2px solid #e0e0e0;color:#333;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+.upi-gpay:hover{box-shadow:0 4px 14px rgba(0,0,0,0.13);}
+.upi-phone{background:linear-gradient(135deg,#6B1D8C,#8e24aa);color:white;box-shadow:0 4px 14px rgba(107,29,140,0.35);}
+.upi-paytm{background:linear-gradient(135deg,#002970,#00457c);color:white;box-shadow:0 4px 14px rgba(0,41,112,0.35);}
+.upi-any{background:linear-gradient(135deg,var(--orange),var(--o2));color:white;box-shadow:0 4px 14px rgba(230,81,0,0.35);}
+.upi-app-icon{font-size:1.3rem;}
+.upi-divider{display:flex;align-items:center;gap:8px;margin:4px 0 10px;color:#ccc;font-size:0.7rem;font-weight:700;}
+.upi-divider::before,.upi-divider::after{content:'';flex:1;height:1px;background:#eee;}
+.pay-note-txt{font-size:0.7rem;color:#666;background:#f9f9f9;border:1px solid #eee;border-radius:8px;padding:6px 10px;margin-top:4px;}
+
+.s-items-list{font-size:0.78rem;color:rgba(255,255,255,0.72);margin-bottom:16px;line-height:1.7;width:100%;max-width:320px;text-align:left;background:rgba(255,255,255,0.08);border-radius:12px;padding:10px 14px;}
+.order-again-btn{background:white;color:var(--green);border:none;border-radius:14px;padding:14px 30px;font-family:'Baloo 2',cursive;font-size:1.1rem;font-weight:700;cursor:pointer;}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-inner">
+    <div class="flag-row">
+      <span style="font-size:1.5rem">🇮🇳</span>
+      <span class="grand">Grand Opening · 15th August</span>
+    </div>
+    <div class="rname">Shree <em>Balaji</em></div>
+    <div class="rcafe">Restaurant &amp; Cafe</div>
+    <div class="raddr">📍 Opposite Bhagvan Das Kirana Store, Raypur Road, Gajner</div>
+    <div class="tbl-badge">🪑 Table <span id="tableNum">–</span></div>
+  </div>
+</div>
+
+<!-- CUSTOMER NAME -->
+<div class="name-sec">
+  <div class="name-lbl">👤 Your Name <span style="font-size:0.7rem;color:#aaa;font-weight:400">(for kitchen &amp; payment)</span></div>
+  <input class="name-in" id="custName" placeholder="Enter your name..." maxlength="40" autocomplete="name">
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="goSec('food',this)">🍽️ Food</button>
+  <button class="tab" onclick="goSec('sandwich',this)">🥪 Sandwich</button>
+  <button class="tab" onclick="goSec('bev',this)">🥤 Beverages</button>
+</div>
+
+<!-- FOOD -->
+<div class="msec" id="sec-food">
+  <div class="sec-ttl">🍽️ Food Items</div>
+  <div class="ic">
+    <div class="ie">🍔</div>
+    <div class="ii"><div class="in">Burger</div><div class="ip">₹20</div></div>
+    <div class="ictrl"><button class="qbtn qm" onclick="chg('burger',-1)">−</button><span class="qn" id="qty-burger">0</span><button class="qbtn qp" onclick="chg('burger',1)">+</button></div>
+  </div>
+  <div class="ic">
+    <div class="ie">🍜</div>
+    <div class="ii"><div class="in">Chaumin</div><div class="ip">₹25</div></div>
+    <div class="ictrl"><button class="qbtn qm" onclick="chg('chaumin',-1)">−</button><span class="qn" id="qty-chaumin">0</span><button class="qbtn qp" onclick="chg('chaumin',1)">+</button></div>
+  </div>
+  <div class="ic">
+    <div class="ie">🍱</div>
+    <div class="ii"><div class="in">Full Plate</div><div class="ip">₹40</div></div>
+    <div class="ictrl"><button class="qbtn qm" onclick="chg('full',-1)">−</button><span class="qn" id="qty-full">0</span><button class="qbtn qp" onclick="chg('full',1)">+</button></div>
+  </div>
+  <div class="ic">
+    <div class="ie">🥐</div>
+    <div class="ii"><div class="in">Patties</div><div class="ip">₹20</div></div>
+    <div class="ictrl"><button class="qbtn qm" onclick="chg('patties',-1)">−</button><span class="qn" id="qty-patties">0</span><button class="qbtn qp" onclick="chg('patties',1)">+</button></div>
+  </div>
+  <div class="ic">
+    <div class="ie">🍕</div>
+    <div class="ii"><div class="in">Pizza</div><div class="ip">₹120</div></div>
+    <div class="ictrl"><button class="qbtn qm" onclick="chg('pizza',-1)">−</button><span class="qn" id="qty-pizza">0</span><button class="qbtn qp" onclick="chg('pizza',1)">+</button></div>
+  </div>
+  <div class="ic" style="border-color:#FFD54F;background:linear-gradient(135deg,#FFFDE7,#fff)">
+    <div class="ie">⭐</div>
+    <div class="ii">
+      <div class="in">Special <span style="font-size:0.65rem;background:#FFD54F;color:#555;padding:1px 6px;border-radius:6px;margin-left:3px">CHEF'S</span></div>
+      <div class="ip">₹150</div>
+    </div>
+    <div class="ictrl"><button class="qbtn qm" onclick="chg('special',-1)">−</button><span class="qn" id="qty-special">0</span><button class="qbtn qp" onclick="chg('special',1)">+</button></div>
+  </div>
+</div>
+
+<!-- SANDWICH -->
+<div class="msec" id="sec-sandwich">
+  <div class="sec-ttl">🥪 Sandwich</div>
+  <div class="ic">
+    <div class="ie">🥪</div>
+    <div class="ii"><div class="in">Sandwich</div><div class="ip">₹70</div></div>
+    <div class="ictrl"><button class="qbtn qm" onclick="chg('sandwich',-1)">−</button><span class="qn" id="qty-sandwich">0</span><button class="qbtn qp" onclick="chg('sandwich',1)">+</button></div>
+  </div>
+  <div class="ic" style="border-color:#C8E6C9;background:linear-gradient(135deg,#F1F8E9,#fff)">
+    <div class="ie">🥖</div>
+    <div class="ii">
+      <div class="in">Big / Special Sandwich <span style="font-size:0.64rem;background:#C8E6C9;color:#1B5E20;padding:1px 6px;border-radius:6px">BIG</span></div>
+      <div class="ip">₹130</div>
+    </div>
+    <div class="ictrl"><button class="qbtn qm" onclick="chg('bigSandwich',-1)">−</button><span class="qn" id="qty-bigSandwich">0</span><button class="qbtn qp" onclick="chg('bigSandwich',1)">+</button></div>
+  </div>
+</div>
+
+<!-- BEVERAGES -->
+<div class="msec" id="sec-bev">
+  <div class="sec-ttl">🥤 Beverages (MRP)</div>
+  <p style="font-size:0.74rem;color:var(--muted);margin-bottom:10px;line-height:1.5;">Write beverage name and its MRP price — it'll be sent to kitchen!</p>
+  <button class="bev-add" onclick="addBev()">➕ Add Beverage</button>
+  <div id="bevList"></div>
+</div>
+
+<!-- NOTE -->
+<div class="note-sec">
+  <div class="note-lbl">📝 Special Instructions</div>
+  <textarea class="note-in" id="noteIn" placeholder="Less spicy, extra sauce, no onion..."></textarea>
+</div>
+
+<!-- CART FOOTER -->
+<div class="cart-foot">
+  <div class="cart-row">
+    <span class="cart-lbl" id="cartInfo">0 items · add something to order</span>
+    <span class="cart-total" id="cartTotal">₹0</span>
+  </div>
+  <button class="order-btn" id="orderBtn" disabled onclick="placeOrder()">
+    <span class="btxt">🛒 Place Order</span>
+    <div class="spinner"></div>
+  </button>
+</div>
+
+<!-- SUCCESS + PAYMENT QR SCREEN -->
+<div class="success-screen hidden" id="successScreen">
+  <div class="s-icon">🎉</div>
+  <div class="s-ttl">Order Placed!</div>
+  <div class="s-sub">Your order is with the kitchen.<br>Please pay below via UPI 👇</div>
+
+  <div class="s-infobox">
+    <div class="s-irow">🪑 Table <span id="sTable">–</span></div>
+    <div class="s-irow" id="sCustRow" style="display:none">👤 <span id="sCust">–</span></div>
+  </div>
+
+  <!-- TAP TO PAY — opens UPI app directly on customer phone -->
+  <div class="pay-card" id="payCard">
+    <div class="pay-card-ttl">💳 Pay via UPI</div>
+    <div class="pay-card-sub">Tap any app below — amount is pre-filled!</div>
+
+    <div class="pay-amt-box">
+      <div class="pay-amt-lbl">Total Amount</div>
+      <div class="pay-card-amt" id="payCardAmt">₹0</div>
+      <div class="pay-upi-id">To: 9129134620@axl · Shree Balaji</div>
+    </div>
+
+    <a class="upi-btn upi-gpay" id="btnGpay" href="#">
+      <span class="upi-app-icon">🟢</span> Pay with Google Pay
+    </a>
+    <a class="upi-btn upi-phone" id="btnPhone" href="#">
+      <span class="upi-app-icon">💜</span> Pay with PhonePe
+    </a>
+    <a class="upi-btn upi-paytm" id="btnPaytm" href="#">
+      <span class="upi-app-icon">🔵</span> Pay with Paytm
+    </a>
+    <div class="upi-divider">or</div>
+    <a class="upi-btn upi-any" id="btnAny" href="#">
+      <span class="upi-app-icon">📱</span> Open Any UPI App
+    </a>
+
+    <div class="pay-note-txt">👆 Tap a button above — your UPI app will open with ₹ amount already filled in</div>
+  </div>
+
+  <div class="s-items-list" id="sItems"></div>
+  <button class="order-again-btn" onclick="resetOrder()">🔄 Order More Items</button>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const FB = {
+  apiKey:"AIzaSyDHk9pH8KVji0ukWsLaOFRyQcJiXOMxApw",
+  authDomain:"jaybalqji.firebaseapp.com",
+  databaseURL:"https://jaybalqji-default-rtdb.firebaseio.com",
+  projectId:"jaybalqji",
+  storageBucket:"jaybalqji.firebasestorage.app",
+  messagingSenderId:"531713907504",
+  appId:"1:531713907504:web:c2fc212702d4cbeb9346f5"
+};
+const app = initializeApp(FB);
+const db  = getDatabase(app);
+
+// UPI ID — change this to your real UPI ID
+const UPI_ID = "9129134620@axl";
+const UPI_NAME = "Shree Balaji Restaurant & Cafe";
+
+const params = new URLSearchParams(location.search);
+const tableNum = params.get('table') || '?';
+document.getElementById('tableNum').textContent = tableNum;
+document.getElementById('sTable').textContent = tableNum;
+
+const MENU = {
+  burger:      {name:'Burger',              emoji:'🍔', price:20},
+  chaumin:     {name:'Chaumin',             emoji:'🍜', price:25},
+  full:        {name:'Full Plate',          emoji:'🍱', price:40},
+  patties:     {name:'Patties',             emoji:'🥐', price:20},
+  pizza:       {name:'Pizza',               emoji:'🍕', price:120},
+  special:     {name:'Special',             emoji:'⭐', price:150},
+  sandwich:    {name:'Sandwich',            emoji:'🥪', price:70},
+  bigSandwich: {name:'Big/Special Sandwich',emoji:'🥖', price:130},
+};
+
+let qty={}, bevs=[], bevCnt=0;
+
+window.goSec = (id, el) => {
+  document.getElementById('sec-'+id)?.scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+};
+
+window.chg = (key, delta) => {
+  qty[key] = Math.max(0, (qty[key]||0)+delta);
+  document.getElementById('qty-'+key).textContent = qty[key];
+  updateCart();
+};
+
+window.addBev = () => {
+  bevCnt++;
+  const id = 'bev'+bevCnt;
+  bevs.push({id, name:'', price:0});
+  const div = document.createElement('div');
+  div.className='bev-card'; div.id=id;
+  div.innerHTML=`
+    <input class="bev-in" placeholder="Beverage name (e.g. Coke, Lassi)" oninput="upBev('${id}','name',this.value)">
+    <input class="bev-pr" type="number" min="0" placeholder="₹MRP" oninput="upBev('${id}','price',+this.value)">
+    <button class="bev-rm" onclick="rmBev('${id}')">🗑</button>`;
+  document.getElementById('bevList').appendChild(div);
+  updateCart();
+};
+
+window.upBev = (id,f,v) => { const b=bevs.find(b=>b.id===id); if(b){b[f]=v;updateCart();} };
+window.rmBev = (id) => { bevs=bevs.filter(b=>b.id!==id); document.getElementById(id)?.remove(); updateCart(); };
+
+function updateCart() {
+  let total=0, count=0;
+  for(const [k,q] of Object.entries(qty)) {
+    if(q>0){total+=MENU[k].price*q; count+=q;}
+  }
+  for(const b of bevs) {
+    if(b.name&&b.price>0){total+=b.price;count++;}
+  }
+  document.getElementById('cartInfo').textContent = count>0 ? `${count} item${count!==1?'s':''} in cart` : '0 items · add something to order';
+  document.getElementById('cartTotal').textContent = '₹'+total;
+  document.getElementById('orderBtn').disabled = count===0;
+}
+
+window.placeOrder = async () => {
+  const customerName = document.getElementById('custName').value.trim();
+  const btn = document.getElementById('orderBtn');
+  btn.classList.add('loading'); btn.disabled=true;
+
+  const items=[];
+  let total=0;
+  for(const [k,q] of Object.entries(qty)) {
+    if(q>0) {
+      const m=MENU[k], sub=m.price*q;
+      items.push({name:m.name,emoji:m.emoji,price:m.price,qty:q,subtotal:sub});
+      total+=sub;
+    }
+  }
+  for(const b of bevs) {
+    if(b.name&&b.price>0){
+      items.push({name:b.name,emoji:'🥤',price:b.price,qty:1,subtotal:b.price,isBevMRP:true});
+      total+=b.price;
+    }
+  }
+
+  const note = document.getElementById('noteIn').value.trim();
+  const order = {table:tableNum, customerName, items, total, note, status:'new', timestamp:Date.now()};
+
+  try {
+    await push(ref(db,'orders'), order);
+    showSuccess(order, customerName, total);
+  } catch(e) {
+    alert('Error: '+e.message);
+    btn.classList.remove('loading'); btn.disabled=false;
+  }
+};
+
+function showSuccess(order, customerName, total) {
+  // Fill info
+  const cr = document.getElementById('sCustRow');
+  if(customerName) {
+    document.getElementById('sCust').textContent = customerName;
+    cr.style.display='flex';
+  } else { cr.style.display='none'; }
+
+  // Item summary
+  document.getElementById('sItems').innerHTML =
+    order.items.map(i=>`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.08)"><span>${i.emoji} ${i.name} ×${i.qty}</span><span style="color:#a5f3c0">₹${i.subtotal}</span></div>`).join('') +
+    `<div style="display:flex;justify-content:space-between;padding:6px 0 0;font-weight:800;color:white;font-size:0.9rem"><span>💰 Total</span><span>₹${total}</span></div>`;
+
+  // ── Generate UPI deep links for tap-to-pay ──
+  const txnNote = 'Table '+order.table+(customerName?' - '+customerName:'')+' Order';
+  const upiBase = `pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURIComponent(UPI_NAME)}&am=${total}&cu=INR&tn=${encodeURIComponent(txnNote)}`;
+
+  // Universal UPI deep link (opens any UPI app chooser)
+  const upiLink = `upi://pay?${upiBase}`;
+  // App-specific intent links
+  const gpayLink  = `gpay://upi/pay?${upiBase}`;
+  const phoneLink = `phonepe://pay?${upiBase}`;
+  const paytmLink = `paytmmp://pay?${upiBase}`;
+
+  document.getElementById('payCardAmt').textContent = '₹'+total;
+
+  function setUPIBtn(id, href) {
+    const el = document.getElementById(id);
+    el.href = href;
+    el.onclick = (e) => {
+      e.preventDefault();
+      window.location.href = href;
+      // Fallback: if app not installed, try universal link after short delay
+      setTimeout(() => { window.location.href = upiLink; }, 1500);
+    };
+  }
+
+  setUPIBtn('btnGpay',  gpayLink);
+  setUPIBtn('btnPhone', phoneLink);
+  setUPIBtn('btnPaytm', paytmLink);
+  document.getElementById('btnAny').href = upiLink;
+  document.getElementById('btnAny').onclick = (e) => {
+    e.preventDefault();
+    window.location.href = upiLink;
+  };
+
+  document.getElementById('successScreen').classList.remove('hidden');
+  window.scrollTo(0,0);
+}
+
+window.resetOrder = () => {
+  qty={}; bevs=[]; bevCnt=0;
+  document.querySelectorAll('.qn').forEach(el=>el.textContent='0');
+  document.getElementById('bevList').innerHTML='';
+  document.getElementById('noteIn').value='';
+  document.getElementById('custName').value='';
+  document.getElementById('successScreen').classList.add('hidden');
+  updateCart();
+};
+</script>
+</body>
+</html>

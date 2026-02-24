@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Shree Balaji Restaurant &amp; Cafe – Dashboard</title>
+<meta name="theme-color" content="#FF5722">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Shree Balaji">
+<meta name="mobile-web-app-capable" content="yes">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{
+  --bg:#0C0C0C;--surface:#171717;--card:#1E1E1E;
+  --border:#282828;--orange:#FF5722;--yellow:#FFB300;
+  --green:#22C55E;--red:#EF4444;--amber:#F59E0B;
+  --purple:#A855F7;--blue:#60A5FA;
+  --text:#F0F0F0;--muted:#666;
+  --nav:65px;--hdr:70px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--bg);color:var(--text);font-family:'Poppins',sans-serif;display:flex;flex-direction:column;}
+
+/* ── HEADER ── */
+.hdr{height:var(--hdr);background:var(--surface);border-bottom:2px solid var(--orange);display:flex;align-items:center;justify-content:space-between;padding:0 14px;flex-shrink:0;z-index:50;}
+.logo{font-family:'Baloo 2',cursive;font-size:1.15rem;font-weight:800;color:var(--yellow);line-height:1;}
+.logo em{color:var(--orange);font-style:normal;}
+.logo-tag{font-size:0.68rem;color:var(--orange);font-weight:700;margin-top:-1px;}
+.logo-sub{font-size:0.55rem;color:var(--muted);}
+.live{display:flex;align-items:center;gap:5px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);border-radius:20px;padding:5px 11px;font-size:0.68rem;color:var(--green);font-weight:700;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:blink 1.4s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+
+/* Sound unlock banner */
+.unlock-bar{background:linear-gradient(135deg,#1a0a00,#2d1500);border:1px solid rgba(255,87,34,0.4);border-radius:12px;margin:10px 12px 0;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.unlock-txt{font-size:0.75rem;color:#FFB347;font-weight:600;flex:1;}
+.unlock-btn{background:var(--orange);color:white;border:none;border-radius:8px;padding:7px 14px;font-family:'Poppins',sans-serif;font-size:0.75rem;font-weight:700;cursor:pointer;white-space:nowrap;}
+
+/* ── SCROLL ── */
+.content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:calc(var(--nav)+8px);}
+
+/* ── STATS ── */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px 12px 0;}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px 6px;text-align:center;position:relative;overflow:hidden;}
+.stat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;}
+.s-new::after{background:var(--red);}
+.s-prep::after{background:var(--amber);}
+.s-done::after{background:var(--green);}
+.sn{font-size:1.8rem;font-weight:700;line-height:1;}
+.sl{font-size:0.56rem;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:0.4px;}
+.s-new .sn{color:var(--red);}
+.s-prep .sn{color:var(--amber);}
+.s-done .sn{color:var(--green);}
+
+/* Quick revenue bar */
+.qrev{margin:10px 12px 0;background:linear-gradient(135deg,rgba(255,87,34,0.12),rgba(255,179,0,0.07));border:1px solid rgba(255,87,34,0.25);border-radius:14px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;}
+.qr-lbl{font-size:0.66rem;color:var(--muted);}
+.qr-amt{font-family:'Baloo 2',cursive;font-size:1.55rem;font-weight:800;color:var(--orange);}
+.qr-sub{font-size:0.6rem;color:var(--muted);margin-top:1px;}
+
+/* ── FILTER PILLS ── */
+.filters{display:flex;gap:8px;padding:12px 12px 8px;overflow-x:auto;scrollbar-width:none;}
+.filters::-webkit-scrollbar{display:none;}
+.fpill{white-space:nowrap;background:var(--surface);border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:20px;font-size:0.72rem;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:5px;font-family:'Poppins',sans-serif;}
+.fpill.active{background:var(--orange);border-color:var(--orange);color:white;}
+.pcnt{background:rgba(255,255,255,0.22);border-radius:10px;padding:1px 6px;font-size:0.6rem;}
+.fpill:not(.active) .pcnt{background:var(--border);color:var(--text);}
+
+/* ── ORDER CARDS ── */
+.board{padding:0 12px 12px;display:flex;flex-direction:column;gap:10px;}
+.ocard{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;animation:cardIn 0.3s ease;}
+@keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.ocard.status-new{border-left:4px solid var(--red);}
+.ocard.status-preparing{border-left:4px solid var(--amber);}
+.ocard.status-done{border-left:4px solid var(--green);opacity:0.55;}
+.card-top{padding:11px 14px;display:flex;justify-content:space-between;align-items:flex-start;}
+.tbl-info{display:flex;align-items:flex-start;gap:10px;}
+.tbl-icon{background:var(--orange);width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.tbl-num{font-family:'Baloo 2',cursive;font-size:1.1rem;font-weight:800;line-height:1.1;}
+.cname{font-size:0.7rem;color:var(--yellow);font-weight:700;margin-top:2px;}
+.cbadge{background:rgba(255,179,0,0.12);border:1px solid rgba(255,179,0,0.2);border-radius:6px;padding:1px 7px;}
+.otime{font-size:0.6rem;color:var(--muted);margin-top:2px;}
+.spill{padding:4px 11px;border-radius:20px;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;flex-shrink:0;}
+.status-new .spill{background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.2);}
+.status-preparing .spill{background:rgba(245,158,11,0.15);color:var(--amber);border:1px solid rgba(245,158,11,0.2);}
+.status-done .spill{background:rgba(34,197,94,0.15);color:var(--green);border:1px solid rgba(34,197,94,0.2);}
+.card-items{padding:0 14px 8px;}
+.oitem{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:0.79rem;border-bottom:1px solid #242424;}
+.oitem:last-child{border-bottom:none;}
+.oitem-l{display:flex;align-items:center;gap:7px;}
+.qtag{background:#2A2A2A;border-radius:6px;padding:1px 7px;font-weight:700;font-size:0.68rem;color:var(--amber);}
+.iprice{color:var(--muted);font-size:0.72rem;}
+.mrptag{background:rgba(255,179,0,0.12);color:var(--yellow);border-radius:4px;padding:0 4px;font-size:0.56rem;font-weight:700;border:1px solid rgba(255,179,0,0.2);}
+.card-note{margin:2px 14px 8px;padding:7px 10px;background:rgba(255,179,0,0.06);border:1px solid rgba(255,179,0,0.12);border-radius:8px;font-size:0.7rem;color:var(--amber);}
+.card-foot{padding:10px 14px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;}
+.ototal{font-weight:700;font-size:1.1rem;color:var(--yellow);font-family:'Baloo 2',cursive;}
+.btns{display:flex;gap:5px;flex-wrap:wrap;}
+.abtn{padding:7px 11px;border-radius:10px;border:none;font-family:'Poppins',sans-serif;font-size:0.7rem;font-weight:600;cursor:pointer;transition:transform 0.15s;}
+.abtn:active{transform:scale(0.92);}
+.b-prep{background:var(--amber);color:#000;}
+.b-done{background:var(--green);color:white;}
+.b-del{background:#242424;color:var(--muted);padding:7px 9px;}
+.b-reopen{background:#242424;color:var(--text);}
+.b-pay{background:linear-gradient(135deg,#7C3AED,#A855F7);color:white;}
+.b-det{background:#242424;color:var(--blue);padding:7px 9px;}
+.empty{text-align:center;padding:50px 20px;color:var(--muted);}
+.ei{font-size:3rem;margin-bottom:10px;}
+
+/* ── BOTTOM NAV ── */
+.bnav{height:var(--nav);background:var(--surface);border-top:1px solid var(--border);display:flex;padding:0 4px;flex-shrink:0;z-index:50;}
+.nitem{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:8px 4px;border-radius:12px;cursor:pointer;border:none;background:none;color:var(--muted);font-family:'Poppins',sans-serif;transition:color 0.2s;position:relative;}
+.nitem.active{color:var(--orange);}
+.nicon{font-size:1.3rem;line-height:1;}
+.nlbl{font-size:0.54rem;font-weight:700;}
+.nbadge{position:absolute;top:5px;right:8px;background:var(--red);color:white;border-radius:10px;padding:1px 5px;font-size:0.52rem;font-weight:700;min-width:16px;text-align:center;display:none;}
+
+/* ── PAGES ── */
+.page{display:none;}
+.page.active{display:block;}
+.ph{padding:16px 12px 8px;}
+.ptitle{font-family:'Baloo 2',cursive;font-size:1.2rem;font-weight:800;color:var(--yellow);}
+
+/* Revenue */
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 12px 10px;}
+.rc{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:15px;}
+.rcl{font-size:0.64rem;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.3px;}
+.rca{font-size:1.5rem;font-weight:700;color:var(--yellow);line-height:1;font-family:'Baloo 2',cursive;}
+.rcs{font-size:0.62rem;color:var(--muted);margin-top:4px;}
+.rc.today{grid-column:1/-1;background:linear-gradient(135deg,rgba(255,87,34,0.13),rgba(255,179,0,0.07));border-color:rgba(255,87,34,0.3);}
+.rc.today .rca{font-size:2rem;color:var(--orange);}
+.rc.week .rca{color:var(--purple);}
+.rc.week{border-color:rgba(168,85,247,0.2);}
+.toplist{padding:0 12px 12px;}
+.trow{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;}
+.trk{font-family:'Baloo 2',cursive;font-size:1.1rem;width:26px;flex-shrink:0;}
+.tnm{flex:1;font-size:0.83rem;font-weight:600;}
+.trev{font-family:'Baloo 2',cursive;font-size:0.9rem;font-weight:700;color:var(--green);}
+.tcnt{font-size:0.66rem;color:var(--muted);}
+
+/* QR Page */
+.urlrow{margin:0 12px 10px;display:flex;gap:8px;}
+.urlin{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--text);font-family:'Poppins',sans-serif;font-size:0.77rem;outline:none;}
+.urlin:focus{border-color:var(--orange);}
+.genbtn{background:var(--orange);color:white;border:none;border-radius:10px;padding:10px 14px;font-family:'Poppins',sans-serif;font-size:0.77rem;font-weight:700;cursor:pointer;}
+.qrgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 12px 12px;}
+.qrc{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:12px;text-align:center;}
+.qrct{font-family:'Baloo 2',cursive;font-size:0.94rem;font-weight:700;color:var(--yellow);margin-bottom:8px;}
+.qrbox{background:white;border-radius:10px;padding:6px;display:inline-block;margin-bottom:6px;}
+.qrh{font-size:0.58rem;color:var(--muted);}
+
+/* Settings */
+.slist{padding:12px;display:flex;flex-direction:column;gap:10px;}
+.si{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.si-col{flex-direction:column;align-items:flex-start;}
+.sil{font-size:0.84rem;font-weight:600;}
+.sis{font-size:0.66rem;color:var(--muted);margin-top:2px;}
+.tog{width:44px;height:24px;background:#333;border-radius:12px;position:relative;cursor:pointer;transition:background 0.2s;border:none;flex-shrink:0;}
+.tog.on{background:var(--green);}
+.tog::after{content:'';position:absolute;width:18px;height:18px;background:white;border-radius:50%;top:3px;left:3px;transition:transform 0.2s;}
+.tog.on::after{transform:translateX(20px);}
+.sin{background:#232323;border:1px solid var(--border);border-radius:8px;padding:7px 10px;color:var(--text);font-family:'Poppins',sans-serif;font-size:0.72rem;outline:none;width:100%;margin-top:6px;}
+.sin:focus{border-color:var(--orange);}
+
+/* ═══════════════════════════════════
+   POPUP — FIXED WITH DISPLAY NONE/FLEX
+═══════════════════════════════════ */
+#popWrap{
+  display:none; /* HIDDEN by default — no pointer-events tricks */
+  position:fixed;inset:0;z-index:9999;
+  background:rgba(0,0,0,0.78);
+  align-items:flex-end;
+}
+#popWrap.show{display:flex;}
+#popup{
+  width:100%;
+  background:#1A1A1A;
+  border:2px solid var(--orange);
+  border-bottom:none;
+  border-radius:26px 26px 0 0;
+  padding:20px;
+  box-shadow:0 -12px 50px rgba(255,87,34,0.25);
+  animation:slideUp 0.38s cubic-bezier(0.34,1.08,0.64,1);
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+#popup.hiding{animation:slideDown 0.28s ease forwards;}
+@keyframes slideDown{to{transform:translateY(100%)}}
+.pdrag{width:38px;height:4px;background:#3A3A3A;border-radius:2px;margin:0 auto 18px;}
+.phdr{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.pbell{font-size:2.2rem;animation:bellRing 0.7s ease;}
+@keyframes bellRing{0%,100%{transform:rotate(0)}15%{transform:rotate(25deg)}35%{transform:rotate(-25deg)}55%{transform:rotate(15deg)}75%{transform:rotate(-10deg)}90%{transform:rotate(5deg)}}
+.ptitle{font-family:'Baloo 2',cursive;font-size:1.4rem;color:var(--yellow);font-weight:800;line-height:1;}
+.pbrand{font-size:0.66rem;color:var(--muted);}
+.pchips{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+.chip-tbl{background:rgba(255,87,34,0.16);border:1px solid rgba(255,87,34,0.35);border-radius:10px;padding:5px 13px;font-size:0.9rem;font-weight:800;color:var(--orange);}
+.chip-cust{background:rgba(255,179,0,0.13);border:1px solid rgba(255,179,0,0.28);border-radius:10px;padding:5px 13px;font-size:0.84rem;font-weight:700;color:var(--yellow);}
+.pitems{background:#232323;border-radius:12px;padding:10px 12px;margin-bottom:10px;max-height:190px;overflow-y:auto;}
+.pitem{display:flex;justify-content:space-between;font-size:0.82rem;padding:5px 0;border-bottom:1px solid #2D2D2D;}
+.pitem:last-child{border-bottom:none;}
+.ptotal{font-weight:800;font-size:1.1rem;color:var(--yellow);margin-bottom:12px;font-family:'Baloo 2',cursive;}
+.pnote{font-size:0.72rem;color:var(--amber);margin-bottom:12px;background:rgba(255,179,0,0.07);padding:8px 10px;border-radius:8px;}
+.pactions{display:flex;gap:10px;}
+.pbtn{flex:1;padding:15px;border:none;border-radius:14px;font-family:'Poppins',sans-serif;font-size:0.9rem;font-weight:700;cursor:pointer;transition:transform 0.14s;}
+.pbtn:active{transform:scale(0.96);}
+.pstart{background:var(--orange);color:white;}
+.pdismiss{background:#2A2A2A;color:var(--text);}
+
+/* ═══════════════════════════════════
+   PAYMENT MODAL
+═══════════════════════════════════ */
+#payWrap{
+  display:none;
+  position:fixed;inset:0;z-index:10000;
+  background:rgba(0,0,0,0.9);
+  align-items:center;justify-content:center;
+  padding:20px;
+}
+#payWrap.show{display:flex;}
+.paybox{
+  background:#1A1A1A;
+  border:2px solid var(--purple);
+  border-radius:24px;
+  padding:24px;
+  width:100%;max-width:360px;
+  text-align:center;
+  animation:popIn 0.35s cubic-bezier(0.34,1.15,0.64,1);
+}
+@keyframes popIn{from{opacity:0;transform:scale(0.82)}to{opacity:1;transform:scale(1)}}
+.pay-ttl{font-family:'Baloo 2',cursive;font-size:1.4rem;font-weight:800;color:#D8B4FE;margin-bottom:2px;}
+.pay-sub{font-size:0.76rem;color:var(--muted);margin-bottom:10px;}
+.pay-amt{font-family:'Baloo 2',cursive;font-size:2.6rem;font-weight:800;color:var(--purple);margin-bottom:4px;line-height:1;}
+.pay-cust{font-size:0.82rem;color:var(--yellow);font-weight:700;margin-bottom:14px;min-height:18px;}
+.pay-note{background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.25);border-radius:10px;padding:8px 12px;font-size:0.7rem;color:#C4B5FD;margin-bottom:14px;}
+.pay-qrwrap{background:white;border-radius:16px;padding:10px;display:inline-block;margin-bottom:12px;}
+.pay-upi{font-size:0.67rem;color:var(--muted);margin-bottom:14px;}
+.pay-close{background:#252525;color:var(--text);border:none;border-radius:12px;padding:13px;font-family:'Poppins',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;width:100%;}
+
+/* ═══ DETAIL MODAL ═══ */
+#detWrap{
+  display:none;
+  position:fixed;inset:0;z-index:10000;
+  background:rgba(0,0,0,0.88);
+  align-items:center;justify-content:center;
+  padding:16px;
+}
+#detWrap.show{display:flex;}
+.detbox{
+  background:#1A1A1A;border:1px solid var(--border);border-radius:22px;
+  padding:20px;width:100%;max-width:380px;
+  max-height:82vh;overflow-y:auto;
+  animation:popIn 0.3s ease;
+}
+.det-ttl{font-family:'Baloo 2',cursive;font-size:1.15rem;font-weight:800;color:var(--yellow);margin-bottom:12px;}
+.det-lbl{font-size:0.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin:12px 0 5px;}
+.det-row{display:flex;justify-content:space-between;padding:6px 0;font-size:0.81rem;border-bottom:1px solid #242424;}
+.det-row:last-child{border-bottom:none;}
+.det-total{display:flex;justify-content:space-between;padding:10px 0 0;font-weight:700;font-size:1rem;color:var(--yellow);font-family:'Baloo 2',cursive;}
+.det-close{background:#252525;color:var(--text);border:none;border-radius:12px;padding:11px;font-family:'Poppins',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;width:100%;margin-top:14px;}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div>
+    <div class="logo">Shree <em>Balaji</em></div>
+    <div class="logo-tag">Restaurant &amp; Cafe</div>
+    <div class="logo-sub">👤 Sonu Kashyap · TOF 9129134620 · Gajner</div>
+  </div>
+  <div class="live"><div class="dot"></div>LIVE</div>
+</div>
+
+<div class="content" id="mainContent">
+
+  <!-- ORDERS PAGE -->
+  <div class="page active" id="page-orders">
+    <!-- Sound unlock bar — shown until user taps -->
+    <div class="unlock-bar" id="unlockBar">
+      <div class="unlock-txt">🔔 Tap to enable alarm &amp; notifications for new orders</div>
+      <button class="unlock-btn" onclick="unlockAudio()">Enable</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat s-new"><div class="sn" id="cNew">0</div><div class="sl">🔴 New</div></div>
+      <div class="stat s-prep"><div class="sn" id="cPrep">0</div><div class="sl">🟡 Prep</div></div>
+      <div class="stat s-done"><div class="sn" id="cDone">0</div><div class="sl">✅ Done</div></div>
+    </div>
+
+    <div class="qrev">
+      <div>
+        <div class="qr-lbl">📅 Today's Revenue</div>
+        <div class="qr-amt" id="todayAmt">₹0</div>
+        <div class="qr-sub" id="todaySub">0 orders today</div>
+      </div>
+      <div style="text-align:right">
+        <div class="qr-lbl">🔥 Active Tables</div>
+        <div class="qr-amt" id="activeTbl" style="font-size:1.3rem">0</div>
+      </div>
+    </div>
+
+    <div class="filters">
+      <button class="fpill active" id="pill-all"       onclick="setTab('all')">All <span class="pcnt" id="b-all">0</span></button>
+      <button class="fpill"        id="pill-new"       onclick="setTab('new')">🔴 New <span class="pcnt" id="b-new">0</span></button>
+      <button class="fpill"        id="pill-preparing" onclick="setTab('preparing')">🟡 Prep <span class="pcnt" id="b-preparing">0</span></button>
+      <button class="fpill"        id="pill-done"      onclick="setTab('done')">✅ Done <span class="pcnt" id="b-done">0</span></button>
+    </div>
+
+    <div class="board" id="board">
+      <div class="empty"><div class="ei">⏳</div><div>Connecting...</div></div>
+    </div>
+  </div>
+
+  <!-- REVENUE PAGE -->
+  <div class="page" id="page-revenue">
+    <div class="ph"><div class="ptitle">💰 Revenue Report</div></div>
+    <div class="rgrid">
+      <div class="rc today">
+        <div class="rcl">📅 Today</div>
+        <div class="rca" id="rDay">₹0</div>
+        <div class="rcs" id="rDaySub">0 orders</div>
+      </div>
+      <div class="rc week">
+        <div class="rcl">📆 This Week</div>
+        <div class="rca" id="rWeek">₹0</div>
+        <div class="rcs" id="rWeekSub">0 orders</div>
+      </div>
+      <div class="rc">
+        <div class="rcl">🗓️ This Month</div>
+        <div class="rca" id="rMonth">₹0</div>
+        <div class="rcs" id="rMonthSub">0 orders</div>
+      </div>
+      <div class="rc">
+        <div class="rcl">📆 This Year</div>
+        <div class="rca" id="rYear">₹0</div>
+        <div class="rcs" id="rYearSub">0 orders</div>
+      </div>
+      <div class="rc" style="grid-column:1/-1">
+        <div class="rcl">💎 All Time</div>
+        <div class="rca" id="rAll">₹0</div>
+        <div class="rcs" id="rAllSub">0 total orders</div>
+      </div>
+    </div>
+    <div class="ph" style="padding-top:4px;"><div class="ptitle" style="font-size:1rem;">🏆 Top Items (Today)</div></div>
+    <div class="toplist" id="topList"><div style="text-align:center;padding:16px;color:var(--muted);font-size:0.78rem;">No data yet</div></div>
+  </div>
+
+  <!-- TABLE QR PAGE -->
+  <div class="page" id="page-qr">
+    <div class="ph"><div class="ptitle">📲 Table QR Codes</div></div>
+    <p style="font-size:0.72rem;color:var(--muted);padding:0 12px 10px;line-height:1.5;">Enter your menu URL → tap Generate → print and place on each table!</p>
+    <div class="urlrow">
+      <input class="urlin" id="menuUrl" placeholder="https://yoursite.com/menu.html">
+      <button class="genbtn" onclick="genQRs()">⚡ Generate</button>
+    </div>
+    <div class="qrgrid" id="qrGrid">
+      <div style="grid-column:1/-1;text-align:center;padding:28px;color:var(--muted);font-size:0.76rem;">Enter URL above and tap ⚡ Generate</div>
+    </div>
+  </div>
+
+  <!-- SETTINGS PAGE -->
+  <div class="page" id="page-settings">
+    <div class="ph"><div class="ptitle">⚙️ Settings</div></div>
+    <div class="slist">
+      <div class="si">
+        <div><div class="sil">🔔 Order Alarm Sound</div><div class="sis">Beep + vibrate when new order arrives</div></div>
+        <button class="tog on" id="soundTog" onclick="toggleSound()"></button>
+      </div>
+      <div class="si">
+        <div><div class="sil">📲 Auto Popup</div><div class="sis">Show popup for every new order</div></div>
+        <button class="tog on" id="popupTog" onclick="togglePopupPref()"></button>
+      </div>
+      <div class="si">
+        <div><div class="sil">🔔 Browser Notifications</div><div class="sis">Native phone notifications</div></div>
+        <button class="abtn b-prep" style="font-size:0.7rem;padding:7px 12px;" onclick="reqNotif()">Request</button>
+      </div>
+      <div class="si si-col">
+        <div><div class="sil">💳 UPI ID for Payments</div><div class="sis">Used to generate payment QR codes</div></div>
+        <input class="sin" id="upiId" value="9129134620@axl">
+      </div>
+      <div class="si">
+        <div><div class="sil">🏪 Restaurant</div><div class="sis">Shree Balaji Restaurant &amp; Cafe, Gajner</div></div>
+        <span style="font-size:0.7rem;color:var(--muted)">Active</span>
+      </div>
+      <div class="si">
+        <div><div class="sil">📞 Owner</div><div class="sis">Sonu Kashyap · TOF 9129134620</div></div>
+        <span style="font-size:0.7rem;color:var(--green);font-weight:700">● Owner</span>
+      </div>
+      <div class="si">
+        <div><div class="sil">🔥 Firebase</div><div class="sis" id="fbSub">Real-time cloud database</div></div>
+        <span id="fbStatus" style="font-size:0.7rem;color:var(--green);font-weight:700">● Live</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<!-- BOTTOM NAV -->
+<div class="bnav">
+  <button class="nitem active" id="nav-orders" onclick="showPage('orders')">
+    <div class="nicon">🧾</div>
+    <span class="nbadge" id="navBadge">0</span>
+    <div class="nlbl">Orders</div>
+  </button>
+  <button class="nitem" id="nav-revenue" onclick="showPage('revenue')">
+    <div class="nicon">💰</div>
+    <div class="nlbl">Revenue</div>
+  </button>
+  <button class="nitem" id="nav-qr" onclick="showPage('qr')">
+    <div class="nicon">📲</div>
+    <div class="nlbl">Table QR</div>
+  </button>
+  <button class="nitem" id="nav-settings" onclick="showPage('settings')">
+    <div class="nicon">⚙️</div>
+    <div class="nlbl">Settings</div>
+  </button>
+</div>
+
+<!-- ═══ ORDER POPUP ═══ -->
+<div id="popWrap">
+  <div id="popup">
+    <div class="pdrag"></div>
+    <div class="phdr">
+      <div class="pbell">🔔</div>
+      <div>
+        <div class="ptitle">New Order!</div>
+        <div class="pbrand">Shree Balaji Restaurant &amp; Cafe</div>
+      </div>
+    </div>
+    <div class="pchips">
+      <div class="chip-tbl">🪑 Table <span id="pTable">–</span></div>
+      <div class="chip-cust" id="pCustChip" style="display:none">👤 <span id="pCust">–</span></div>
+    </div>
+    <div class="pitems" id="pItems"></div>
+    <div class="ptotal" id="pTotal"></div>
+    <div class="pnote" id="pNote" style="display:none"></div>
+    <div class="pactions">
+      <button class="pbtn pstart" onclick="acceptOrder()">▶ Start Preparing</button>
+      <button class="pbtn pdismiss" onclick="dismissPopup()">Dismiss</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PAYMENT MODAL ═══ -->
+<div id="payWrap">
+  <div class="paybox">
+    <div class="pay-ttl">💳 Payment QR</div>
+    <div class="pay-sub" id="paySub">Ask customer to scan &amp; pay via UPI</div>
+    <div class="pay-amt" id="payAmt">₹0</div>
+    <div class="pay-cust" id="payCust"></div>
+    <div class="pay-note" id="payNote"></div>
+    <div class="pay-qrwrap"><div id="payQR" style="width:200px;height:200px;"></div></div>
+    <div class="pay-upi" id="payUPI"></div>
+    <button class="pay-close" onclick="closePayModal()">✕ Close</button>
+  </div>
+</div>
+
+<!-- ═══ DETAIL MODAL ═══ -->
+<div id="detWrap">
+  <div class="detbox">
+    <div class="det-ttl">🧾 Order Details</div>
+    <div id="detContent"></div>
+    <button class="det-close" onclick="closeDetail()">✕ Close</button>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const FB = {
+  apiKey:"AIzaSyDHk9pH8KVji0ukWsLaOFRyQcJiXOMxApw",
+  authDomain:"jaybalqji.firebaseapp.com",
+  databaseURL:"https://jaybalqji-default-rtdb.firebaseio.com",
+  projectId:"jaybalqji",
+  storageBucket:"jaybalqji.firebasestorage.app",
+  messagingSenderId:"531713907504",
+  appId:"1:531713907504:web:c2fc212702d4cbeb9346f5"
+};
+const app = initializeApp(FB);
+const db  = getDatabase(app);
+
+let orders={}, tab='all';
+let soundOn=true, popupOn=true;
+let knownIds=new Set(), popupOrderId=null;
+let AC=null, audioUnlocked=false;
+let payQRInst=null;
+
+/* ═══════════════════════════════════
+   AUDIO — FULLY FIXED
+   Browser requires user gesture before
+   AudioContext can play sound.
+   We show an "Enable" button to unlock.
+═══════════════════════════════════ */
+
+// Call this on the Enable button
+window.unlockAudio = () => {
+  if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
+  AC.resume().then(() => {
+    audioUnlocked = true;
+    document.getElementById('unlockBar').style.display = 'none';
+    // Play a tiny test beep to confirm
+    playBeep();
+    // Also request browser notification permission
+    reqNotif();
+  });
+};
+
+function playBeep() {
+  if (!soundOn || !audioUnlocked || !AC) return;
+  try {
+    if (AC.state === 'suspended') AC.resume();
+    // 4 beep pattern: ding-ding pause ding-ding
+    const pattern = [
+      { t:0,    freq:880,  dur:0.18 },
+      { t:0.22, freq:880,  dur:0.18 },
+      { t:0.55, freq:1046, dur:0.18 },
+      { t:0.77, freq:1046, dur:0.18 },
+    ];
+    pattern.forEach(({t, freq, dur}) => {
+      const osc = AC.createOscillator();
+      const gain = AC.createGain();
+      osc.connect(gain);
+      gain.connect(AC.destination);
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      const now = AC.currentTime + t;
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.65, now + 0.04);
+      gain.gain.setValueAtTime(0.65, now + dur - 0.04);
+      gain.gain.linearRampToValueAtTime(0, now + dur);
+      osc.start(now);
+      osc.stop(now + dur + 0.05);
+    });
+  } catch(e){ console.warn('beep err', e); }
+}
+
+function vibrate() {
+  if (navigator.vibrate) {
+    navigator.vibrate([200, 120, 200, 120, 400]);
+  }
+}
+
+window.toggleSound = () => {
+  soundOn = !soundOn;
+  document.getElementById('soundTog').classList.toggle('on', soundOn);
+};
+window.togglePopupPref = () => {
+  popupOn = !popupOn;
+  document.getElementById('popupTog').classList.toggle('on', popupOn);
+};
+
+/* ═══ BROWSER NOTIFICATIONS ═══ */
+window.reqNotif = async () => {
+  if (!('Notification' in window)) return;
+  try {
+    await Notification.requestPermission();
+  } catch(e){}
+};
+
+function sendNotification(order) {
+  if (Notification.permission !== 'granted') return;
+  try {
+    new Notification('🔔 New Order — Table ' + order.table, {
+      body: (order.customerName ? '👤 ' + order.customerName + '\n' : '') +
+            (order.items||[]).map(i => i.emoji + ' ' + i.name + ' ×' + i.qty).join(', ') +
+            '\n💰 ₹' + order.total,
+      icon: 'https://via.placeholder.com/64/FF5722/ffffff?text=SB',
+      badge: 'https://via.placeholder.com/32/FF5722/ffffff?text=SB',
+      vibrate: [200, 120, 200],
+      tag: 'new-order',
+      requireInteraction: true
+    });
+  } catch(e){}
+}
+
+/* ═══ PAGES ═══ */
+window.showPage = (p) => {
+  document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.nitem').forEach(x => x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.getElementById('nav-'+p).classList.add('active');
+};
+
+window.setTab = (t) => {
+  tab = t;
+  document.querySelectorAll('.fpill').forEach(x => x.classList.remove('active'));
+  document.getElementById('pill-'+t).classList.add('active');
+  render();
+};
+
+/* ═══ POPUP ═══ */
+function showPopup(id, order) {
+  if (!popupOn) return;
+  popupOrderId = id;
+  document.getElementById('pTable').textContent = order.table || '?';
+  const cc = document.getElementById('pCustChip');
+  if (order.customerName) {
+    document.getElementById('pCust').textContent = order.customerName;
+    cc.style.display = 'flex';
+  } else { cc.style.display='none'; }
+  document.getElementById('pItems').innerHTML = (order.items||[]).map(i =>
+    `<div class="pitem"><span>${i.emoji} ${i.name} ×${i.qty}${i.isBevMRP?' <span style="font-size:0.58rem;color:var(--yellow)">[MRP]</span>':''}</span><span style="color:var(--green);font-weight:700">₹${i.subtotal}</span></div>`
+  ).join('');
+  document.getElementById('pTotal').textContent = '💰 Total: ₹' + order.total;
+  const pn = document.getElementById('pNote');
+  if (order.note) { pn.textContent='📝 '+order.note; pn.style.display='block'; }
+  else pn.style.display='none';
+  // Remove hiding class if re-showing
+  document.getElementById('popup').classList.remove('hiding');
+  document.getElementById('popWrap').classList.add('show');
+}
+
+window.dismissPopup = () => {
+  const popup = document.getElementById('popup');
+  popup.classList.add('hiding');
+  setTimeout(() => {
+    document.getElementById('popWrap').classList.remove('show');
+    popup.classList.remove('hiding');
+  }, 290);
+  popupOrderId = null;
+};
+
+window.acceptOrder = async () => {
+  if (popupOrderId) await update(ref(db,'orders/'+popupOrderId), {status:'preparing'});
+  window.dismissPopup();
+};
+
+/* ═══ PAYMENT QR — FIXED ═══ */
+window.showPayQR = (id, enc) => {
+  const order = JSON.parse(decodeURIComponent(enc));
+  const upiId = document.getElementById('upiId').value.trim() || '9129134620@axl';
+  const amount = order.total;
+  // Standard UPI deep link — works with all UPI apps (GPay, PhonePe, Paytm etc)
+  const upiUrl = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent('Shree Balaji Restaurant & Cafe')}&am=${amount}&cu=INR&tn=${encodeURIComponent('Table '+order.table+' Order')}`;
+
+  document.getElementById('paySub').textContent = 'Table ' + order.table + (order.customerName ? ' · '+order.customerName : '');
+  document.getElementById('payAmt').textContent = '₹' + amount;
+  document.getElementById('payCust').textContent = order.customerName ? '👤 '+order.customerName : '';
+  document.getElementById('payNote').textContent = '📱 Customer scans this QR to pay ₹'+amount+' instantly via any UPI app';
+  document.getElementById('payUPI').textContent = 'UPI ID: ' + upiId;
+
+  // Clear and regenerate QR
+  const qrEl = document.getElementById('payQR');
+  qrEl.innerHTML = '';
+  if (payQRInst) { try { payQRInst.clear(); } catch(e){} payQRInst = null; }
+  try {
+    payQRInst = new QRCode(qrEl, {
+      text: upiUrl,
+      width: 200, height: 200,
+      colorDark: '#000000', colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  } catch(e) {
+    qrEl.innerHTML = `<div style="width:200px;height:200px;display:flex;align-items:center;justify-content:center;color:#555;font-size:0.72rem;text-align:center;padding:10px;">UPI QR<br>${upiId}<br>₹${amount}</div>`;
+  }
+  document.getElementById('payWrap').classList.add('show');
+};
+window.closePayModal = () => document.getElementById('payWrap').classList.remove('show');
+
+/* ═══ DETAIL MODAL ═══ */
+window.showDetail = (id, enc) => {
+  const o = JSON.parse(decodeURIComponent(enc));
+  const ts = o.timestamp ? new Date(o.timestamp).toLocaleString('en-IN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '–';
+  document.getElementById('detContent').innerHTML = `
+    <div class="det-lbl">Order Info</div>
+    <div class="det-row"><span>🪑 Table</span><span style="font-weight:700;color:var(--orange)">Table ${o.table}</span></div>
+    ${o.customerName?`<div class="det-row"><span>👤 Customer</span><span style="font-weight:700;color:var(--yellow)">${o.customerName}</span></div>`:''}
+    <div class="det-row"><span>🕐 Time</span><span style="color:var(--muted)">${ts}</span></div>
+    <div class="det-row"><span>📋 Status</span><span>${o.status==='new'?'🔴 New':o.status==='preparing'?'🟡 Preparing':'✅ Done'}</span></div>
+    <div class="det-lbl" style="margin-top:12px;">Items</div>
+    ${(o.items||[]).map(i=>`<div class="det-row"><span>${i.emoji} ${i.name}${i.isBevMRP?' [MRP]':''} ×${i.qty}</span><span style="color:var(--green)">₹${i.subtotal}</span></div>`).join('')}
+    <div class="det-total"><span>Total</span><span>₹${o.total}</span></div>
+    ${o.note?`<div class="det-lbl" style="margin-top:12px;">Note</div><div style="font-size:0.8rem;color:var(--amber);padding:4px 0">📝 ${o.note}</div>`:''}
+  `;
+  document.getElementById('detWrap').classList.add('show');
+};
+window.closeDetail = () => document.getElementById('detWrap').classList.remove('show');
+
+/* ═══ ORDER ACTIONS ═══ */
+window.changeStatus = async (id, st) => await update(ref(db,'orders/'+id), {status:st});
+window.deleteOrder  = async (id) => { if(confirm('Remove this order?')) await remove(ref(db,'orders/'+id)); };
+
+/* ═══ HELPERS ═══ */
+function ago(ts) {
+  if(!ts) return '';
+  const s = Math.floor((Date.now()-ts)/1000);
+  if(s<60) return s+'s ago';
+  if(s<3600) return Math.floor(s/60)+'m ago';
+  return Math.floor(s/3600)+'h ago';
+}
+function statusLbl(s) { return s==='new'?'🔴 New':s==='preparing'?'🟡 Preparing':'✅ Done'; }
+function enc(o) { return encodeURIComponent(JSON.stringify(o)); }
+function btns(id, s, o) {
+  const e = enc(o);
+  const pay = `<button class="abtn b-pay" onclick='showPayQR("${id}","${e}")'>💳 Pay</button>`;
+  const det = `<button class="abtn b-det" onclick='showDetail("${id}","${e}")'>🔍</button>`;
+  const del = `<button class="abtn b-del" onclick="deleteOrder('${id}')">🗑</button>`;
+  if(s==='new')       return `<button class="abtn b-prep" onclick="changeStatus('${id}','preparing')">▶ Start</button>${pay}${det}${del}`;
+  if(s==='preparing') return `<button class="abtn b-done" onclick="changeStatus('${id}','done')">✓ Done</button>${pay}${det}${del}`;
+  return `<button class="abtn b-reopen" onclick="changeStatus('${id}','new')">↩ Reopen</button>${pay}${det}${del}`;
+}
+
+/* ═══ RENDER ═══ */
+function render() {
+  const board = document.getElementById('board');
+  let list = Object.entries(orders).sort((a,b)=>(b[1].timestamp||0)-(a[1].timestamp||0));
+  if(tab!=='all') list = list.filter(([,o])=>o.status===tab);
+  if(!list.length) {
+    const m={all:'No orders yet 🍽️',new:'No new orders! 👍',preparing:'Nothing being prepared.',done:'No completed orders.'};
+    board.innerHTML=`<div class="empty"><div class="ei">🍽️</div><div>${m[tab]}</div></div>`;
+    return;
+  }
+  board.innerHTML = list.map(([id,o])=>`
+    <div class="ocard status-${o.status}">
+      <div class="card-top">
+        <div class="tbl-info">
+          <div class="tbl-icon">🪑</div>
+          <div>
+            <div class="tbl-num">Table ${o.table}</div>
+            ${o.customerName?`<div class="cname"><span class="cbadge">👤 ${o.customerName}</span></div>`:''}
+            <div class="otime">${ago(o.timestamp)}</div>
+          </div>
+        </div>
+        <span class="spill">${statusLbl(o.status)}</span>
+      </div>
+      <div class="card-items">
+        ${(o.items||[]).map(i=>`
+          <div class="oitem">
+            <div class="oitem-l">
+              <span>${i.emoji}</span>
+              <span class="qtag">×${i.qty}</span>
+              <span>${i.name}</span>
+              ${i.isBevMRP?'<span class="mrptag">MRP</span>':''}
+            </div>
+            <span class="iprice">₹${i.subtotal}</span>
+          </div>`).join('')}
+      </div>
+      ${o.note?`<div class="card-note">📝 ${o.note}</div>`:''}
+      <div class="card-foot">
+        <div class="ototal">₹${o.total}</div>
+        <div class="btns">${btns(id,o.status,o)}</div>
+      </div>
+    </div>`).join('');
+}
+
+/* ═══ STATS ═══ */
+function updateAll() {
+  const all = Object.values(orders);
+  const now = new Date();
+  const todayStr = now.toDateString();
+  const mo = now.getMonth(), yr = now.getFullYear();
+  const wd = now.getDay();
+  const wkStart = new Date(now);
+  wkStart.setDate(now.getDate() - (wd===0?6:wd-1));
+  wkStart.setHours(0,0,0,0);
+  const sum = arr => arr.reduce((s,o)=>s+(o.total||0),0);
+  const todayO  = all.filter(o=>o.timestamp&&new Date(o.timestamp).toDateString()===todayStr);
+  const weekO   = all.filter(o=>o.timestamp&&new Date(o.timestamp)>=wkStart);
+  const monthO  = all.filter(o=>{if(!o.timestamp)return false;const d=new Date(o.timestamp);return d.getMonth()===mo&&d.getFullYear()===yr;});
+  const yearO   = all.filter(o=>o.timestamp&&new Date(o.timestamp).getFullYear()===yr);
+  const newC    = all.filter(o=>o.status==='new').length;
+  const prepC   = all.filter(o=>o.status==='preparing').length;
+  const doneC   = all.filter(o=>o.status==='done').length;
+  document.getElementById('cNew').textContent      = newC;
+  document.getElementById('cPrep').textContent     = prepC;
+  document.getElementById('cDone').textContent     = doneC;
+  document.getElementById('b-all').textContent     = all.length;
+  document.getElementById('b-new').textContent     = newC;
+  document.getElementById('b-preparing').textContent = prepC;
+  document.getElementById('b-done').textContent    = doneC;
+  document.getElementById('todayAmt').textContent  = '₹'+sum(todayO);
+  document.getElementById('todaySub').textContent  = todayO.length+' orders today';
+  const actTbls = new Set(all.filter(o=>o.status==='new'||o.status==='preparing').map(o=>o.table));
+  document.getElementById('activeTbl').textContent = actTbls.size;
+  const badge = document.getElementById('navBadge');
+  if(newC>0){badge.textContent=newC;badge.style.display='block';}else badge.style.display='none';
+  // Revenue page
+  document.getElementById('rDay').textContent   = '₹'+sum(todayO);
+  document.getElementById('rDaySub').textContent = todayO.length+' orders';
+  document.getElementById('rWeek').textContent  = '₹'+sum(weekO);
+  document.getElementById('rWeekSub').textContent = weekO.length+' orders';
+  document.getElementById('rMonth').textContent = '₹'+sum(monthO);
+  document.getElementById('rMonthSub').textContent = monthO.length+' orders';
+  document.getElementById('rYear').textContent  = '₹'+sum(yearO);
+  document.getElementById('rYearSub').textContent = yearO.length+' orders';
+  document.getElementById('rAll').textContent   = '₹'+sum(all);
+  document.getElementById('rAllSub').textContent = all.length+' total orders';
+  // Top items
+  const imap = {};
+  todayO.forEach(o=>(o.items||[]).forEach(i=>{
+    if(!imap[i.name]) imap[i.name]={emoji:i.emoji,qty:0,rev:0};
+    imap[i.name].qty+=i.qty; imap[i.name].rev+=i.subtotal;
+  }));
+  const sorted = Object.entries(imap).sort((a,b)=>b[1].qty-a[1].qty).slice(0,5);
+  const medals=['🥇','🥈','🥉','4️⃣','5️⃣'];
+  document.getElementById('topList').innerHTML = sorted.length
+    ? sorted.map(([nm,d],i)=>`<div class="trow"><div class="trk">${medals[i]}</div><div class="tnm">${d.emoji} ${nm}</div><div style="text-align:right"><div class="trev">₹${d.rev}</div><div class="tcnt">${d.qty} sold</div></div></div>`).join('')
+    : '<div style="text-align:center;padding:14px;color:var(--muted);font-size:0.76rem;">No orders today yet</div>';
+}
+
+/* ═══ TABLE QR GENERATOR ═══ */
+window.genQRs = () => {
+  const base = document.getElementById('menuUrl').value.trim();
+  if(!base){ alert('Please enter your menu.html URL first!'); return; }
+  const grid = document.getElementById('qrGrid');
+  grid.innerHTML = '';
+  for(let t=1;t<=12;t++){
+    const url = base + (base.includes('?')?'&':'?') + 'table='+t;
+    const card = document.createElement('div');
+    card.className = 'qrc';
+    card.innerHTML = `<div class="qrct">🪑 Table ${t}</div><div class="qrbox" id="tqr${t}"></div><div class="qrh">Scan to order</div>`;
+    grid.appendChild(card);
+    try {
+      new QRCode(document.getElementById('tqr'+t), {text:url,width:110,height:110,colorDark:'#000',colorLight:'#fff',correctLevel:QRCode.CorrectLevel.M});
+    } catch(e){}
+  }
+};
+
+/* ═══ FIREBASE ═══ */
+let firstLoad = true;
+onValue(ref(db,'orders'), snapshot => {
+  const data = snapshot.val() || {};
+  const newIds = new Set(Object.keys(data));
+  if(firstLoad) {
+    firstLoad = false;
+    const pending = Object.entries(data).filter(([,o])=>o.status==='new').sort((a,b)=>(b[1].timestamp||0)-(a[1].timestamp||0));
+    if(pending.length) {
+      showPopup(pending[0][0], pending[0][1]);
+      playBeep(); vibrate();
+      sendNotification(pending[0][1]);
+    }
+  } else {
+    for(const id of newIds) {
+      if(!knownIds.has(id)) {
+        playBeep(); vibrate();
+        showPopup(id, data[id]);
+        sendNotification(data[id]);
+        break;
+      }
+    }
+  }
+  knownIds = newIds;
+  orders = data;
+  updateAll();
+  render();
+}, err => {
+  document.getElementById('fbStatus').textContent = '● Error';
+  document.getElementById('fbStatus').style.color = 'var(--red)';
+  document.getElementById('fbSub').textContent = err.message;
+});
+setInterval(render, 30000);
+</script>
+</body>
+</html>
